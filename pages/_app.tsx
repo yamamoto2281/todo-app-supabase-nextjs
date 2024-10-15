@@ -46,14 +46,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       await push('/')
     }
   }
-  // supabase.auth.onAuthStateChange((event, _) => {
-  //   if (event === 'SIGNED_IN' && pathname === '/') {
-  //     push('/dashboard')
-  //   }
-  //   if (event === 'SIGNED_OUT') {
-  //     push('/')
-  //   }
-  // })
+  supabase.auth.onAuthStateChange((event, _) => {
+    if (event === 'SIGNED_IN' && pathname === '/') {
+      push('/dashboard')
+    }
+    if (event === 'SIGNED_OUT') {
+      push('/')
+    }
+  })
   useEffect(() => {
     validateSession()
   }, [])
