@@ -9,7 +9,8 @@ export const useMutateTask = () => {
 //追加用
   const createTaskMutation = useMutation(
     async (task: Omit<Task, 'id' | 'created_at'>) => {
-      const { data, error } = await supabase.from('todos').insert(task)
+      const { data, error } = await supabase.from('todos').insert(task).select()
+      //.supabaseの更新で、.selectで更新した内容を明示的に取得しないとnullになるらしい
       if (error) throw new Error(error.message)
       return data
     },
@@ -17,7 +18,7 @@ export const useMutateTask = () => {
       onSuccess: (res) => {
         const previousTodos = queryClient.getQueryData<Task[]>(['todos'])
         if (previousTodos) {
-          queryClient.setQueryData(['todos'], [...previousTodos, res![0]])
+          queryClient.setQueryData(['todos'], [...previousTodos, res[0]])
         }
         console.log(res)
         reset()
@@ -36,6 +37,8 @@ export const useMutateTask = () => {
         .update({ title: task.title })
         //idが同じとき
         .eq('id', task.id)
+        //.supabaseの更新で、.selectで更新した内容を明示的に取得しないとnullになるらしい
+        .select()
       if (error) throw new Error(error.message)
       return data
     },
@@ -46,7 +49,7 @@ export const useMutateTask = () => {
           queryClient.setQueryData(
             ['todos'],
             previousTodos.map((task) =>
-              task.id === variables.id ? res![0] : task
+              task.id === variables.id ? res[0] : task
             )
           )
         }
@@ -60,7 +63,7 @@ export const useMutateTask = () => {
   )
   const deleteTaskMutation = useMutation(
     async (id: string) => {
-      const { data, error } = await supabase.from('todos').delete().eq('id', id)
+      const { data, error } = await supabase.from('todos').delete().eq('id', id).select()
       if (error) throw new Error(error.message)
       return data
     },
