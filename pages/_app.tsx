@@ -39,8 +39,10 @@ const queryClient = new QueryClient({
 function MyApp({ Component, pageProps }: AppProps) {
   const { push, pathname } = useRouter()
   const validateSession = async () => {
-    const user = supabase.auth.getUser()
-    if (await user && pathname === '/') {
+    const { data , error} = await supabase.auth.getUser()
+    const user = data?.user
+    console.log('User=',data.user)
+    if (user && pathname === '/') {
       push('/dashboard')
     } else if (!user && pathname !== '/') {
       await push('/')

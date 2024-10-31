@@ -6,7 +6,7 @@ import { Task, EditedTask } from '../types/types'
 export const useMutateTask = () => {
   const queryClient = useQueryClient()
   const reset = useStore((state) => state.resetEditedTask)
-//追加用
+//新規作成用
   const createTaskMutation = useMutation(
     async (task: Omit<Task, 'id' | 'created_at'>) => {
       const { data, error } = await supabase.from('todos').insert(task).select()

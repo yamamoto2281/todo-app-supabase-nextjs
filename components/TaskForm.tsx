@@ -18,10 +18,10 @@ export const TaskForm: VFC = () => {
         return; // エラーがある場合は処理を中断
     }
 
-    // ユーザーが存在しない場合のチェック
+    // ユーザーが存在しない場合
     if (!user) {
         console.error("ユーザーが存在しません。");
-        return;
+        return;// エラーがある場合は処理を中断
     }
 
     if (editedTask.id === '')
